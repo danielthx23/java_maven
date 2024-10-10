@@ -10,7 +10,13 @@ public class RemedioBO {
 
     public ArrayList<RemedioTO> findAll() {
         remedioDAO = new RemedioDAO();
-
+        // aqui se implementa a regra de negócios
         return remedioDAO.findAll();
+    }
+    
+    public RemedioTO findByCodigo(Long codigo) {
+        remedioDAO = new RemedioDAO();
+        // aqui se implementa a regra de negócios
+        return remedioDAO.findByCodigo(codigo);
     }
 }
