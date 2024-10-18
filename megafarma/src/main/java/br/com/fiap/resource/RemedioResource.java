@@ -67,4 +67,18 @@ public class RemedioResource {
         }
         return response.build();
     }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response update(@Valid RemedioTO remedio) {
+        RemedioTO resultado = remedioBO.update(remedio);
+        Response.ResponseBuilder response = null;
+        if (resultado != null) {
+            response = Response.ok();
+        } else {
+            response = Response.status(400);
+        }
+        response.entity(resultado);
+        return response.build();
+    }
 }
