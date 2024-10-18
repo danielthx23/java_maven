@@ -58,7 +58,7 @@ public class RemedioResource {
 
     @DELETE
     @Path("/{codigo}")
-    public Response delete(@PathParam("coigo") Long codigo) {
+    public Response delete(@PathParam("codigo") Long codigo) {
         Response.ResponseBuilder response = null;
         if (remedioBO.delete(codigo)) {
             response = Response.status(204);
