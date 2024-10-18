@@ -69,12 +69,14 @@ public class RemedioResource {
     }
 
     @PUT
+    @Path("/{codigo}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@Valid RemedioTO remedio) {
+    public Response update(@Valid RemedioTO remedio, @PathParam("codigo") Long codigo) {
+        remedio.setCodigo(codigo);
         RemedioTO resultado = remedioBO.update(remedio);
         Response.ResponseBuilder response = null;
         if (resultado != null) {
-            response = Response.ok();
+            response = Response.created(null);
         } else {
             response = Response.status(400);
         }
