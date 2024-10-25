@@ -1,6 +1,7 @@
 package br.com.fiap.dao;
 
-import br.com.fiap.to.RemedioTO;
+import br.com.fiap.to.ClienteTO;
+import br.com.fiap.to.VendaTO;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -9,20 +10,25 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ClienteDAO extends Repository {
-    public ArrayList<RemedioTO> findAll() {
-        ArrayList<RemedioTO> remedios = new ArrayList<>();
+    public ArrayList<ClienteTO> findAll() {
+        ArrayList<ClienteTO> clientes = new ArrayList<>();
+        ArrayList<VendaTO> vendas = new ArrayList<>();
         String sql = "select * from ddd_clientes order by codigo";
         try (PreparedStatement ps = getConnection().prepareStatement(sql)) {
             ResultSet rs = ps.executeQuery();
             if (rs != null) {
                 while (rs.next()) {
-                    RemedioTO remedio = new RemedioTO();
-                    remedio.setCodigo(rs.getLong("codigo"));
-                    remedio.setNome(rs.getString("nome"));
-                    remedio.setPreco(rs.getDouble("preco"));
-                    remedio.setDataDeFabricacao(rs.getDate("data_de_fabricacao").toLocalDate());
-                    remedio.setDataDeValidade(rs.getDate("data_de_validade").toLocalDate());
-                    remedios.add(remedio);
+                    ClienteTO cliente = new ClienteTO();
+                    cliente.setCodigo(rs.getLong("codigo"));
+                    cliente.setNome(rs.getString("nome"));
+                    cliente.setCpf(rs.getString("cpf"));
+                    cliente.setEmail(rs.getString("email"));
+                    cliente.setDataDeNascimento(rs.getDate("data_de_nascimento").toLocalDate());
+                    sql = "select * from ddd_clientes order by codigo";
+                    PreparedStatement ps = getConnection().prepareStatement(sql) {
+
+                    }
+                    clientes.add(cliente);
                 }
             } else {
                 return null;
@@ -32,21 +38,21 @@ public class ClienteDAO extends Repository {
         } finally {
             closeConnection();
         }
-        return remedios;
+        return clientes;
     }
 
-    public RemedioTO findByCodigo(Long codigo) {
-        RemedioTO remedio = new RemedioTO();
-        String sql = "select * from ddd_remedios where codigo = ?";
+    public ClienteTO findByCodigo(Long codigo) {
+        ClienteTO cliente = new ClienteTO();
+        String sql = "select * from ddd_clientes where codigo = ?";
         try(PreparedStatement ps = getConnection().prepareStatement(sql)) {
             ps.setLong(1, codigo);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                remedio.setCodigo(rs.getLong("codigo"));
-                remedio.setNome(rs.getString("nome"));
-                remedio.setPreco(rs.getDouble("preco"));
-                remedio.setDataDeFabricacao(rs.getDate("data_de_fabricacao").toLocalDate());
-                remedio.setDataDeValidade(rs.getDate("data_de_validade").toLocalDate());
+                cliente.setCodigo(rs.getLong("codigo"));
+                cliente.setNome(rs.getString("nome"));
+                cliente.setCpf(rs.getString("cpf"));
+                cliente.setEmail(rs.getString("email"));
+                cliente.setDataDeNascimento(rs.getDate("data_de_nascimento").toLocalDate());
             } else {
                 return null;
             }
@@ -55,18 +61,18 @@ public class ClienteDAO extends Repository {
         } finally {
             closeConnection();
         }
-        return remedio;
+        return cliente;
     }
 
-    public RemedioTO save(RemedioTO remedio) {
-        String sql = "insert into ddd_remedios(nome, preco, data_de_fabricacao, data_de_validade) values(?, ?, ?, ?)";
+    public ClienteTO save(ClienteTO cliente) {
+        String sql = "insert into ddd_clientes(nome, cpf, email, data_de_nascimento) values(?, ?, ?, ?)";
         try(PreparedStatement ps = getConnection().prepareStatement(sql)) {
-            ps.setString(1, remedio.getNome());
-            ps.setDouble(2, remedio.getPreco());
-            ps.setDate(3, Date.valueOf(remedio.getDataDeFabricacao()));
-            ps.setDate(4, Date.valueOf(remedio.getDataDeValidade()));
+            ps.setString(1, cliente.getNome());
+            ps.setString(2, cliente.getCpf());
+            ps.setString(3, cliente.getEmail());
+            ps.setDate(4, Date.valueOf(cliente.getDataDeNascimento()));
             if (ps.executeUpdate() > 0) {
-                return remedio;
+                return cliente;
             } else {
                 return null;
             }
@@ -79,7 +85,7 @@ public class ClienteDAO extends Repository {
     }
 
     public boolean delete(Long codigo) {
-        String sql = "delete from ddd_remedios where codigo = ?";
+        String sql = "delete from ddd_clientes where codigo = ?";
         try(PreparedStatement ps = getConnection().prepareStatement(sql)) {
             ps.setLong(1, codigo);
             return ps.executeUpdate() > 0;
@@ -91,16 +97,15 @@ public class ClienteDAO extends Repository {
         return false;
     }
 
-    public RemedioTO update(RemedioTO remedio) {
-        String sql = "update ddd_remedios set nome=?, preco=?, data_de_fabricacao=?, data_de_validade=? where codigo=?";
+    public ClienteTO update(ClienteTO cliente) {
+        String sql = "update ddd_clientes set nome=?, cpf=?, email=?, data_de_nascimento=? where codigo=?";
         try(PreparedStatement ps = getConnection().prepareStatement(sql)) {
-            ps.setString(1, remedio.getNome());
-            ps.setDouble(2, remedio.getPreco());
-            ps.setDate(3, Date.valueOf(remedio.getDataDeFabricacao()));
-            ps.setDate(4, Date.valueOf(remedio.getDataDeValidade()));
-            ps.setLong(5, remedio.getCodigo());
+            ps.setString(1, cliente.getNome());
+            ps.setString(2, cliente.getCpf());
+            ps.setString(3, cliente.getEmail());
+            ps.setDate(4, Date.valueOf(cliente.getDataDeNascimento()));
             if (ps.executeUpdate() > 0) {
-                return remedio;
+                return cliente;
             } else {
                 return null;
             }

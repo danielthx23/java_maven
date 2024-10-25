@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PastOrPresent;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class ClienteTO {
 
@@ -20,6 +21,8 @@ public class ClienteTO {
 
     @PastOrPresent
     private LocalDate dataDeNascimento;
+
+    private List<VendaTO> vendas;
 
     public ClienteTO() {
     }

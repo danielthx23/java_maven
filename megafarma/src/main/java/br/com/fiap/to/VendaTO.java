@@ -3,6 +3,7 @@ package br.com.fiap.to;
 import jakarta.validation.constraints.PastOrPresent;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class VendaTO {
 
@@ -12,6 +13,8 @@ public class VendaTO {
     private LocalDate dataDeVenda;
 
     private Long codCliente;
+
+    private List<Long> codItemsVendidos;
 
     public VendaTO() {
     }
